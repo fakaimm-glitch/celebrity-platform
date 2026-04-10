@@ -27,8 +27,15 @@ const reviews = [
   { id: "3", name: "Andre B.", rating: 4, comment: "Incredible energy from start to finish. Highly recommend the VIP package.", date: "January 2025", initial: "A" },
 ];
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut" as const,  // 👈 add "as const" here
+    },
+  },
 };
 
 const stagger = {

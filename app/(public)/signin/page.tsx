@@ -11,7 +11,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut" as const,  // 👈 add "as const" here
+      ease: "easeOut" as const,
     },
   },
 };
@@ -19,7 +19,7 @@ const fadeUp = {
 const stagger = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1 } },
-};
+} as const;
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");

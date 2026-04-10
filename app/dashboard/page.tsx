@@ -10,15 +10,15 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut" as const,  // 👈 add "as const" here
+      ease: "easeOut" as const,
     },
   },
 };
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-};
+  visible: { transition: { staggerChildren: 0.1 } },
+} as const;
 
 const stats = [
   { label: "Total Spent", value: "$2,480", sub: "↑ 18% this month" },

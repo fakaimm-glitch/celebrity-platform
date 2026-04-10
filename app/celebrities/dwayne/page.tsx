@@ -33,15 +33,15 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut" as const,  // 👈 add "as const" here
+      ease: "easeOut" as const,
     },
   },
 };
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-};
+  visible: { transition: { staggerChildren: 0.1 } },
+} as const;
 
 export default function TaylorSwiftPage() {
   const [bookingType, setBookingType] = useState("private_event");

@@ -30,15 +30,14 @@ const containerVariants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.25 } },
 };
-
 const itemVariants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
 
 const lineVariants = {
   hidden: { scaleX: 0 },
-  visible: { scaleX: 1, transition: { duration: 0.8, ease: "easeOut", delay: 0.3 } },
+  visible: { scaleX: 1, transition: { duration: 0.8, ease: "easeOut" as const, delay: 0.3 } },
 };
 
 export default function HowItWorks() {

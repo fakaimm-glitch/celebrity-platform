@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -66,9 +66,35 @@ export default function DashboardShell({
   subtitle?: string;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
+
+  useEffect(() => {
+    async function loadUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Try to get full_name from profiles table
+     const { data: profile } = await supabase
+  .from("profiles")
+  .select("name")
+  .eq("id", user.id)
+  .single();
+
+if (profile?.name) {
+  setDisplayName(profile.name);
+      } else {
+        // Fallback: use email prefix before @
+        setDisplayName(user.email?.split("@")[0] ?? "User");
+      }
+
+      setUserEmail(user.email ?? "");
+    }
+    loadUser();
+  }, []);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -123,15 +149,19 @@ export default function DashboardShell({
           ))}
         </nav>
 
-        {/* Sign Out at bottom of sidebar */}
+        {/* User info + Sign Out */}
         <div className="px-4 py-5 border-t border-[var(--border)] space-y-2">
           <Link href="/dashboard/settings">
             <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[#1a1a1a] transition cursor-pointer"
               style={{ backgroundColor: "#111" }}>
               <ProfileIcon />
-              <div>
-                <p className="text-[var(--foreground)] text-sm font-semibold">Jordan Rivera</p>
-                <p className="text-[var(--accent)] text-xs">Fan Member</p>
+              <div className="overflow-hidden">
+                <p className="text-[var(--foreground)] text-sm font-semibold truncate">
+                  {displayName || "Loading..."}
+                </p>
+                <p className="text-[var(--accent)] text-xs truncate">
+                  {userEmail || "Fan Member"}
+                </p>
               </div>
             </div>
           </Link>
@@ -154,7 +184,7 @@ export default function DashboardShell({
       {/* MAIN */}
       <div className="flex-1 lg:ml-64 flex flex-col">
 
-        {/* ✅ TOP BAR — fixed on mobile, sticky on desktop */}
+        {/* TOP BAR */}
         <div
           className="fixed top-0 left-0 right-0 lg:sticky lg:top-0 lg:left-auto lg:right-auto flex items-center justify-between px-6 py-4 border-b border-[var(--border)] z-40"
           style={{ backgroundColor: "#0a0a0a" }}
@@ -184,7 +214,7 @@ export default function DashboardShell({
           </Link>
         </div>
 
-        {/* ✅ Spacer to push content below the fixed top bar on mobile */}
+        {/* Spacer for fixed top bar on mobile */}
         <div className="h-[65px] lg:hidden" />
 
         {/* Page Content */}

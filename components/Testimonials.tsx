@@ -4,31 +4,48 @@ import { motion } from "framer-motion";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut" as const,
-    },
-  },
-};
-
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.2 } },
-};
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
+
+const testimonials = [
+  {
+    video: "/vi.mp4",
+    title: "Fan Booking Experience",
+    initial: "S",
+    name: "Sarah M.",
+    role: "Booked a private meet & greet",
+    quote:
+      "I never thought I'd get to meet my favourite celebrity in person. The booking process was seamless and the experience was absolutely life-changing. Worth every penny — 10/10 would do it again!",
+    stars: 5,
+  },
+  {
+    video: "/dwayene.mp4",
+    title: "VIP Backstage Pass",
+    initial: "J",
+    name: "James K.",
+    role: "VIP event experience",
+    quote:
+      "From the fan card to the VIP backstage pass — this platform delivered everything it promised. My daughter cried happy tears meeting her idol. This is the real deal, no scams, just pure magic.",
+    stars: 5,
+  },
+  {
+    video: "/taylor.mp4",
+    title: "One-on-One Meet",
+    initial: "A",
+    name: "Amara T.",
+    role: "One-on-one meet & greet",
+    quote:
+      "Booking through CELEB was the easiest thing I've ever done. Within minutes I had a confirmed slot and the celebrity was exactly as warm and welcoming as I hoped. An experience I'll never forget.",
+    stars: 5,
+  },
+];
 
 export default function Testimonials() {
   return (
     <section className="py-24 bg-[var(--background)]">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-3xl mx-auto px-6">
 
-        {/* Section Header */}
+        {/* Header */}
         <motion.div
           className="text-center mb-16"
           initial="hidden"
@@ -47,90 +64,61 @@ export default function Testimonials() {
           </p>
         </motion.div>
 
-        {/* Video Cards */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-10"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={containerVariants}
-        >
+        {/* Vertical Feed */}
+        <div className="space-y-16">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUp}
+              className="border border-[var(--border)] rounded-3xl overflow-hidden"
+              style={{ backgroundColor: "#0a0a0a" }}
+            >
+              {/* Video — full width */}
+              <div className="relative w-full aspect-video bg-black">
+                <video
+                  className="w-full h-full object-cover"
+                  src={t.video}
+                  controls
+                  playsInline
+                  preload="metadata"
+                />
+              </div>
 
-          {/* Card 1 */}
-          <motion.div variants={cardVariants} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-            {/* Video */}
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden">
-              <iframe
-                className="w-full h-full"
-                src="vi.mp4"
-                title="Fan Booking Experience 1"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-
-            {/* Caption */}
-            <div className="mt-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold text-sm">
-                  S
-                </div>
-                <div>
-                  <p className="text-[var(--foreground)] font-semibold text-sm">Sarah M.</p>
-                  <p className="text-[var(--accent)] text-xs">Booked a private meet & greet</p>
-                </div>
-                <div className="ml-auto flex gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400 text-sm">★</span>
+              {/* Profile + Testimonial */}
+              <div className="p-6">
+                {/* Stars */}
+                <div className="flex gap-0.5 mb-4">
+                  {[...Array(t.stars)].map((_, s) => (
+                    <span key={s} className="text-yellow-400 text-base">★</span>
                   ))}
                 </div>
-              </div>
-              <p className="text-[var(--accent)] text-sm leading-relaxed">
-                "I never thought I'd get to meet my favourite celebrity in person.
-                The booking process was seamless and the experience was absolutely
-                life-changing. Worth every penny — 10/10 would do it again!"
-              </p>
-            </div>
-          </motion.div>
 
-          {/* Card 2 */}
-          <motion.div variants={cardVariants} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-            {/* Video */}
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden">
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=1&modestbranding=1&rel=0"
-                title="Fan Booking Experience 2"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
+                {/* Quote */}
+                <p className="text-[var(--foreground)] text-sm leading-relaxed mb-6">
+                  "{t.quote}"
+                </p>
 
-            {/* Caption */}
-            <div className="mt-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold text-sm">
-                  J
-                </div>
-                <div>
-                  <p className="text-[var(--foreground)] font-semibold text-sm">James K.</p>
-                  <p className="text-[var(--accent)] text-xs">VIP event experience</p>
-                </div>
-                <div className="ml-auto flex gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400 text-sm">★</span>
-                  ))}
+                {/* Divider */}
+                <div className="border-t border-[var(--border)] pt-5 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold text-sm flex-shrink-0">
+                    {t.initial}
+                  </div>
+                  <div>
+                    <p className="text-[var(--foreground)] font-semibold text-sm">{t.name}</p>
+                    <p className="text-[var(--accent)] text-xs">{t.role}</p>
+                  </div>
+                  <div className="ml-auto border border-[var(--border)] rounded-full px-3 py-1 text-[10px] text-[var(--accent)]">
+                    ✓ Verified Fan
+                  </div>
                 </div>
               </div>
-              <p className="text-[var(--accent)] text-sm leading-relaxed">
-                "From the fan card to the VIP backstage pass — this platform
-                delivered everything it promised. My daughter cried happy tears
-                meeting her idol. This is the real deal, no scams, just pure magic."
-              </p>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
+        </div>
 
-        </motion.div>
       </div>
     </section>
   );

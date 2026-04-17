@@ -10,7 +10,7 @@ type User = {
   role: string | null;
   avatar_url: string | null;
   created_at: string | null;
-  email?: string;
+  email: string | null;
 };
 
 export default function AdminUsersPage() {
@@ -21,18 +21,36 @@ export default function AdminUsersPage() {
   const [search, setSearch] = useState("");
 
   async function load() {
-    const { data } = await supabase
+    // Fetch profiles
+    const { data: profiles } = await supabase
       .from("profiles")
       .select("id, name, role, avatar_url, created_at")
       .order("created_at", { ascending: false });
-    setUsers(data ?? []);
+
+    // Fetch auth users via admin RPC to get emails
+    // We use a workaround: store email in profiles or use auth.users view
+    const { data: authUsers } = await supabase
+      .rpc("get_users_with_email");
+
+    // Merge profiles with emails
+    const emailMap: Record<string, string> = {};
+    (authUsers ?? []).forEach((u: any) => {
+      emailMap[u.id] = u.email;
+    });
+
+    const merged = (profiles ?? []).map((p) => ({
+      ...p,
+      email: emailMap[p.id] ?? null,
+    }));
+
+    setUsers(merged);
     setLoading(false);
   }
 
   useEffect(() => { load(); }, []);
 
   async function toggleRole(user: User) {
-    const newRole = user.role === "admin" ? "user" : "admin";
+    const newRole = user.role === "admin" ? "fan" : "admin";
     setUpdating(user.id);
     await supabase.from("profiles").update({ role: newRole }).eq("id", user.id);
     await load();
@@ -41,6 +59,7 @@ export default function AdminUsersPage() {
 
   const filtered = users.filter(u =>
     (u.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
+    (u.email ?? "").toLowerCase().includes(search.toLowerCase()) ||
     (u.id ?? "").toLowerCase().includes(search.toLowerCase())
   );
 
@@ -61,9 +80,13 @@ export default function AdminUsersPage() {
           <p className="text-[var(--accent)] text-xs">Admins</p>
           <p className="text-2xl font-bold text-yellow-400">{users.filter(u => u.role === "admin").length}</p>
         </div>
+        <div className="border border-[var(--border)] rounded-2xl px-5 py-3" style={{ backgroundColor: "#0a0a0a" }}>
+          <p className="text-[var(--accent)] text-xs">Regular Users</p>
+          <p className="text-2xl font-bold text-blue-400">{users.filter(u => u.role !== "admin").length}</p>
+        </div>
         <div className="flex-1 min-w-[200px]">
           <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name or ID..."
+            placeholder="Search by name, email or ID..."
             className="w-full border border-[var(--border)] text-[var(--foreground)] placeholder-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white/40 transition"
             style={{ backgroundColor: "#0a0a0a" }} />
         </div>
@@ -85,33 +108,33 @@ export default function AdminUsersPage() {
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="flex items-center gap-4 px-5 py-4 hover:bg-[#111] transition">
                 {/* Avatar */}
-                <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="w-11 h-11 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {user.avatar_url ? (
                     <img src={user.avatar_url} alt={user.name ?? ""} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-white text-sm font-bold">
-                      {(user.name ?? "U")[0].toUpperCase()}
+                      {(user.name ?? user.email ?? "U")[0].toUpperCase()}
                     </span>
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="text-[var(--foreground)] text-sm font-medium truncate">
+                  <p className="text-[var(--foreground)] text-sm font-semibold truncate">
                     {user.name ?? "No name set"}
                   </p>
-                  <p className="text-[var(--accent)] text-xs font-mono truncate mt-0.5">
-                    {user.id}
+                  <p className="text-[var(--accent)] text-xs truncate mt-0.5">
+                    {user.email ?? "No email"}
                   </p>
-                  {user.created_at && (
-                    <p className="text-[var(--accent)] text-xs mt-0.5">
-                      Joined {new Date(user.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                    </p>
-                  )}
+                  <p className="text-[var(--accent)] text-xs mt-0.5">
+                    Joined {user.created_at
+                      ? new Date(user.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                      : "Unknown"}
+                  </p>
                 </div>
 
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${roleColor(user.role)}`}>
-                    {user.role ?? "user"}
+                    {user.role ?? "fan"}
                   </span>
                   <button
                     onClick={() => toggleRole(user)}

@@ -36,7 +36,6 @@ export default function AdminShell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [adminName, setAdminName] = useState("");
-  const [adminEmail, setAdminEmail] = useState("");
   const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -44,23 +43,27 @@ export default function AdminShell({
 
   useEffect(() => {
     async function checkAdmin() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { router.replace("/"); return; }
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
 
-      const { data: profile } = await supabase
+      // Not logged in at all → go to admin login
+      if (userErr || !user) {
+        router.replace("/admin/login");
+        return;
+      }
+
+      const { data: profile, error: profileErr } = await supabase
         .from("profiles")
         .select("name, role")
         .eq("id", user.id)
         .single();
 
-      // If not admin, redirect away
-      if (profile?.role !== "admin") {
-        router.replace("/dashboard");
+      // Profile fetch failed or not admin → go to admin login
+      if (profileErr || !profile || profile.role !== "admin") {
+        router.replace("/admin/login");
         return;
       }
 
       setAdminName(profile.name ?? user.email?.split("@")[0] ?? "Admin");
-      setAdminEmail(user.email ?? "");
       setAuthChecked(true);
     }
     checkAdmin();
@@ -68,15 +71,17 @@ export default function AdminShell({
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.push("/");
+    router.push("/admin/login");
     router.refresh();
   };
 
-  // Don't render until auth is verified
   if (!authChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#0a0a0a" }}>
-        <div className="text-white/40 text-sm animate-pulse">Verifying access...</div>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin" />
+          <p className="text-white/40 text-sm">Verifying access...</p>
+        </div>
       </div>
     );
   }
@@ -105,20 +110,21 @@ export default function AdminShell({
             <Link key={item.label} href={item.href}
               onClick={() => setSidebarOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium mb-1 transition
-                ${pathname === item.href ? "bg-yellow-400 text-black" : "text-[var(--accent)] hover:text-[var(--foreground)] hover:bg-[#111]"}`}>
+                ${pathname === item.href
+                  ? "bg-yellow-400 text-black"
+                  : "text-[var(--accent)] hover:text-[var(--foreground)] hover:bg-[#111]"
+                }`}>
               <span className="text-base">{item.icon}</span>{item.label}
             </Link>
           ))}
         </nav>
 
-        {/* Admin info + Sign Out */}
         <div className="px-4 py-5 border-t border-[var(--border)] space-y-2">
-          <div className="flex items-center gap-3 px-3 py-3 rounded-xl"
-            style={{ backgroundColor: "#111" }}>
+          <div className="flex items-center gap-3 px-3 py-3 rounded-xl" style={{ backgroundColor: "#111" }}>
             <ProfileIcon />
             <div className="overflow-hidden">
               <p className="text-[var(--foreground)] text-sm font-semibold truncate">{adminName}</p>
-              <p className="text-yellow-400 text-xs truncate">Administrator</p>
+              <p className="text-yellow-400 text-xs">Administrator</p>
             </div>
           </div>
           <Link href="/dashboard"
@@ -142,10 +148,8 @@ export default function AdminShell({
       <div className="flex-1 lg:ml-64 flex flex-col">
 
         {/* TOP BAR */}
-        <div
-          className="fixed top-0 left-0 right-0 lg:sticky lg:top-0 lg:left-auto lg:right-auto flex items-center justify-between px-6 py-4 border-b border-[var(--border)] z-40"
-          style={{ backgroundColor: "#0a0a0a" }}
-        >
+        <div className="fixed top-0 left-0 right-0 lg:sticky lg:top-0 lg:left-auto lg:right-auto flex items-center justify-between px-6 py-4 border-b border-[var(--border)] z-40"
+          style={{ backgroundColor: "#0a0a0a" }}>
           <div className="flex items-center gap-4">
             <button type="button"
               className="flex flex-col justify-center gap-[5px] w-10 h-10 touch-manipulation lg:hidden"
@@ -154,7 +158,9 @@ export default function AdminShell({
               <span className="w-6 h-[2px] bg-white block rounded pointer-events-none" />
               <span className="w-6 h-[2px] bg-white block rounded pointer-events-none" />
             </button>
-            <Link href="/" className="text-white font-bold tracking-wider lg:hidden">CELEB <span className="text-yellow-400 text-xs">ADMIN</span></Link>
+            <Link href="/" className="text-white font-bold tracking-wider lg:hidden">
+              CELEB <span className="text-yellow-400 text-xs">ADMIN</span>
+            </Link>
             <div className="hidden lg:block">
               <p className="text-[var(--foreground)] font-semibold text-sm">{title ?? "Admin"}</p>
               <p className="text-[var(--accent)] text-xs">{subtitle ?? "Admin Panel"}</p>
@@ -163,21 +169,17 @@ export default function AdminShell({
           <ProfileIcon />
         </div>
 
-        {/* Spacer for mobile */}
         <div className="h-[65px] lg:hidden" />
 
-        {/* Page Content */}
         <div className="flex-1 px-6 py-8">
           {children}
         </div>
 
-        {/* Footer */}
         <div className="hidden lg:block border-t border-[var(--border)] px-6 py-5">
           <p className="text-[var(--accent)] text-xs text-center">
             © {new Date().getFullYear()} CELEB Admin Panel
           </p>
         </div>
-
       </div>
     </div>
   );

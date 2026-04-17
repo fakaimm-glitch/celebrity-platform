@@ -1,8 +1,9 @@
 "use client";
 export const dynamic = "force-dynamic";
+
 import DashboardShell from "@/components/DashboardShell";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -15,7 +16,7 @@ const FAN_CARD_PRICE = 49.99;
 type Celebrity = { id: string; name: string; image_url: string; rating: number; country: string; };
 type Settings = Record<string, string>;
 
-export default function FanCardCheckoutPage() {
+function FanCardCheckoutContent() {
   const router = useRouter();
   const params = useSearchParams();
   const supabase = createClient();
@@ -95,16 +96,15 @@ export default function FanCardCheckoutPage() {
     setError(null);
     setSubmitting(true);
     try {
-   const { data: { user } } = await supabase.auth.getUser();
-if (!user) throw new Error("Not authenticated");
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
 
-// ✅ Add this line
-await supabase.from("profiles").upsert(
-  { id: user.id, name: fullName },
-  { onConflict: "id" }
-);
+      await supabase.from("profiles").upsert(
+        { id: user.id, full_name: fullName },
+        { onConflict: "id" }
+      );
 
-const { error: insertErr } = await supabase.from("fan_cards").insert({
+      const { error: insertErr } = await supabase.from("fan_cards").insert({
         user_id: user.id,
         celebrity_id: celebrity.id,
         card_image_url: celebrity.image_url,
@@ -421,5 +421,21 @@ const { error: insertErr } = await supabase.from("fan_cards").insert({
         )}
       </div>
     </DashboardShell>
+  );
+}
+
+export default function FanCardCheckoutPage() {
+  return (
+    <Suspense fallback={
+      <DashboardShell title="Checkout" subtitle="Loading payment details...">
+        <div className="max-w-2xl mx-auto space-y-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-24 rounded-2xl bg-white/5 animate-pulse" />
+          ))}
+        </div>
+      </DashboardShell>
+    }>
+      <FanCardCheckoutContent />
+    </Suspense>
   );
 }

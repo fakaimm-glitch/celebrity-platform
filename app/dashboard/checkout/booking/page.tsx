@@ -1,9 +1,10 @@
 "use client";
+
 export const dynamic = "force-dynamic";
 
 import DashboardShell from "@/components/DashboardShell";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -22,6 +23,14 @@ type Celebrity = {
 type Settings = Record<string, string>;
 
 export default function BookingCheckoutPage() {
+  return (
+    <Suspense fallback={null}>
+      <BookingCheckoutContent />
+    </Suspense>
+  );
+}
+
+function BookingCheckoutContent() {
   const router = useRouter();
   const params = useSearchParams();
   const supabase = createClient();

@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 import DashboardShell from "@/components/DashboardShell";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";

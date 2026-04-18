@@ -71,15 +71,16 @@ export default function Testimonials() {
               key={i}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={fadeUp}
               className="border border-[var(--border)] rounded-3xl overflow-hidden"
               style={{ backgroundColor: "#0a0a0a" }}
             >
-              {/* Video — full width */}
-              <div className="relative w-full aspect-video bg-black">
+              {/* Video — tall enough to show full portrait content */}
+              <div className="relative w-full bg-black" style={{ minHeight: "520px" }}>
                 <video
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
+                  style={{ minHeight: "520px", maxHeight: "700px", display: "block" }}
                   src={t.video}
                   controls
                   playsInline
@@ -101,7 +102,7 @@ export default function Testimonials() {
                   "{t.quote}"
                 </p>
 
-                {/* Divider */}
+                {/* Divider + Profile */}
                 <div className="border-t border-[var(--border)] pt-5 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold text-sm flex-shrink-0">
                     {t.initial}

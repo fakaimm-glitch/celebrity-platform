@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-
+import Image from "next/image";
 const stats = [
   { value: "500+", label: "Celebrities" },
   { value: "10K+", label: "Bookings Made" },
@@ -13,20 +13,17 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center text-center -mx-4 sm:-mx-6 lg:-mx-8">
 
-      {/* Background Image */}
-      <img
-        src="/hero.jpg"
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover object-center"
-      />
-
-      {/* Dark Overlay */}
+      <Image
+  src="/hero.jpg"
+  alt="Hero"
+  fill
+  priority
+  className="object-cover object-center"
+/>
       <div className="absolute inset-0 bg-black/70" />
 
-      {/* Hero Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-20 w-full">
 
-        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -37,7 +34,6 @@ export default function Hero() {
           <span>Exclusive VIP Experiences</span>
         </motion.div>
 
-        {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,7 +45,6 @@ export default function Hero() {
           Moments
         </motion.h1>
 
-        {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -59,18 +54,14 @@ export default function Hero() {
           Private events, backstage passes, and one-on-one moments with the celebrities you love most
         </motion.p>
 
-        {/* Browse Categories + Search Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          
-           <a href="/celebrities"
-            className="flex items-center gap-2 border border-white/40 text-white px-8 py-4 rounded-full hover:bg-white/10 transition text-sm whitespace-nowrap"
-          >
-            ☰ Browse Categories
+          <a href="/signin" className="flex items-center gap-2 border border-white/40 text-white px-8 py-4 rounded-full hover:bg-white/10 transition text-sm whitespace-nowrap">
+            Get Started
           </a>
 
           <div className="relative w-full max-w-lg">
@@ -87,7 +78,6 @@ export default function Hero() {
 
       </div>
 
-      {/* Stats Bar */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

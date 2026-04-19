@@ -13,7 +13,7 @@ const staticCelebrity = {
   price: 300000,
   rating: 4.8,
   reviews_count: 94,
-  bio: "Joe Rogan is a stand-up comedian, UFC commentator, and host of The Joe Rogan Experience — the world's most listened-to podcast. Known for his raw, unfiltered conversations with everyone from scientists to athletes to world leaders.",
+  bio: "Joe Rogan is a stand-up comedian, UFC commentator, and host of The Joe Rogan Experience the world's most listened-to podcast. Known for his raw, unfiltered conversations with everyone from scientists to athletes to world leaders.",
   image_url: "/celebs/joe.jpg",
   tags: ["Comedian", "Podcaster", "UFC Commentator"],
 };

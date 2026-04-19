@@ -15,7 +15,7 @@ const testimonials = [
     name: "Sarah M.",
     role: "Booked a private meet & greet",
     quote:
-      "I never thought I'd get to meet my favourite celebrity in person. The booking process was seamless and the experience was absolutely life-changing. Worth every penny — 10/10 would do it again!",
+      "I never thought I'd get to meet my favourite celebrity in person. The booking process was seamless and the experience was absolutely life-changing. Worth every penny 10/10 would do it again!",
     stars: 5,
   },
   {
@@ -25,7 +25,7 @@ const testimonials = [
     name: "James K.",
     role: "VIP event experience",
     quote:
-      "From the fan card to the VIP backstage pass — this platform delivered everything it promised. My daughter cried happy tears meeting her idol. This is the real deal, no scams, just pure magic.",
+      "From the fan card to the VIP backstage pass this platform delivered everything it promised. My daughter cried happy tears meeting her idol. This is the real deal, no scams, just pure magic.",
     stars: 5,
   },
   {

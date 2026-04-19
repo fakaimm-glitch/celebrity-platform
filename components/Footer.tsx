@@ -24,44 +24,44 @@ const links = [
   {
     heading: "Company",
     items: [
-      { label: "About", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Press", href: "/press" },
+      { label: "About", href: "/signin" },
+      { label: "Careers", href: "/signin" },
+      { label: "Press", href: "/signin" },
     ],
   },
   {
     heading: "Discover",
     items: [
-      { label: "Browse", href: "/browse" },
-      { label: "Categories", href: "/categories" },
-      { label: "Featured", href: "/featured" },
-      { label: "Top Rated", href: "/top-rated" },
-      { label: "New Celebs", href: "/new" },
+      { label: "Browse", href: "/signin" },
+      { label: "Categories", href: "/signin" },
+      { label: "Featured", href: "/signin" },
+      { label: "Top Rated", href: "/signin" },
+      { label: "New Celebs", href: "/signin" },
     ],
   },
   {
     heading: "Services",
     items: [
-      { label: "Book", href: "/booking" },
-      { label: "Donate", href: "/donation" },
-      { label: "Fan Card", href: "/fan-card" },
-      { label: "VIP Access", href: "/vip" },
+      { label: "Book", href: "/signin" },
+      { label: "Donate", href: "/signin" },
+      { label: "Fan Card", href: "/signin" },
+      { label: "VIP Access", href: "/signin" },
     ],
   },
   {
     heading: "Support",
     items: [
-      { label: "Help", href: "/help" },
-      { label: "Contact", href: "/contact" },
-      { label: "FAQ", href: "/faq" },
+      { label: "Help", href: "/signin" },
+      { label: "Contact", href: "/signin" },
+      { label: "FAQ", href: "/signin" },
     ],
   },
   {
     heading: "Legal",
     items: [
-      { label: "Terms", href: "/terms" },
-      { label: "Privacy", href: "/privacy" },
-      { label: "Cookies", href: "/cookies" },
+      { label: "Terms", href: "/signin" },
+      { label: "Privacy", href: "/signin" },
+      { label: "Cookies", href: "/signin" },
     ],
   },
 ];
@@ -92,7 +92,7 @@ export default function Footer() {
               {["𝕏", "IG", "YT", "TK"].map((s) => (
                 <motion.a
                   key={s}
-                  href="#"
+                  href="/signin"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-9 h-9 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--accent)] hover:border-white/40 hover:text-white transition text-xs font-bold"
@@ -140,7 +140,7 @@ export default function Footer() {
             {["Terms", "Privacy", "Cookies"].map((item) => (
               <Link
                 key={item}
-                href={`/${item.toLowerCase()}`}
+                href="/signin"
                 className="text-[var(--accent)] text-sm opacity-50 hover:opacity-100 hover:text-[var(--foreground)] transition"
               >
                 {item}

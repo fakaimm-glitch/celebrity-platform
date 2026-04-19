@@ -14,7 +14,7 @@ const steps = [
     number: "02",
     title: "Book Your Experience",
     description:
-      "Choose your experience type — private event, backstage pass, or one-on-one meet. Select a date and confirm instantly.",
+      "Choose your experience type private event, backstage pass, or one-on-one meet. Select a date and confirm instantly.",
     icon: "📅",
   },
   {
@@ -59,7 +59,7 @@ export default function HowItWorks() {
           How It Works
         </h2>
         <p className="text-[var(--accent)] text-sm max-w-md mx-auto">
-          From discovery to your unforgettable moment — three simple steps is all it takes.
+          From discovery to your unforgettable moment, three simple steps is all it takes.
         </p>
       </motion.div>
 

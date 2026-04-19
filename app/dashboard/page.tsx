@@ -163,7 +163,7 @@ export default function DashboardPage() {
         <motion.div variants={fadeUp}>
           <h1 className="text-2xl sm:text-4xl font-bold text-[var(--foreground)] leading-tight">Your Universe</h1>
           <p className="text-[var(--accent)] text-xs sm:text-sm mt-0.5">
-            Welcome back, {profile?.name ?? "..."} — here's what's happening
+            Welcome back, {profile?.name ?? "..."}  here's what's happening
           </p>
         </motion.div>
         <motion.div variants={fadeUp} className="flex gap-2 flex-wrap">

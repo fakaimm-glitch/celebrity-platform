@@ -23,7 +23,7 @@ const slides = [
     badge: "🎬 Hollywood Experiences",
     headline: "Meet Your",
     highlight: "Icon",
-    sub: "Exclusive access to Hollywood's elite — private events, set visits, and unforgettable one-on-one encounters.",
+    sub: "Exclusive access to Hollywood's elite private events, set visits, and unforgettable one-on-one encounters.",
   },
 ];
 

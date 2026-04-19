@@ -1,6 +1,7 @@
 "use client";
 
 import Hero from "@/components/Hero";
+import Sponsors from "@/components/Sponsors";
 import FeaturedCelebrities from "@/components/FeaturedCelebrities";
 import HowItWorks from "@/components/HowItWorks";
 import Testimonials from "@/components/Testimonials";
@@ -11,6 +12,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
+       <Sponsors />
       <FeaturedCelebrities />
       <HowItWorks />
       <Testimonials />
